@@ -1,6 +1,5 @@
 require "simplecov/notifications/version"
 require 'octokit'
-require 'pry'
 
 # Ensure we are using a compatible version of SimpleCov
 major, minor, patch = SimpleCov::VERSION.scan(/\d+/).first(3).map(&:to_i)
@@ -21,7 +20,6 @@ module SimpleCov
 
       def format(result)
         current_coverage = result.covered_percent
-        binding.pry
         return unless last_report['result']
 
         previous_coverage = last_report['result']['covered_percent']
