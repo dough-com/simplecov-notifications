@@ -63,7 +63,7 @@ module SimpleCov
         #   description: coverage_report_short_description(data)
         # )
 
-        if data[:coverage_drop] && ENV['CI_PULL_REQUEST']
+        if ENV['CI_PULL_REQUEST']
           github.add_comment(
             owner_repo_name,
             pull_request_number,
