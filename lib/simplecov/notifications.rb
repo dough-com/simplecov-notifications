@@ -46,6 +46,11 @@ module SimpleCov
       end
 
       def send_status(data)
+        puts "Sending: #{data}"
+        puts "ENV: #{ENV}"
+
+        puts ""
+
         unless ENV['CIRCLECI']
           puts "Data: #{data}"
           return
@@ -60,7 +65,7 @@ module SimpleCov
           description: coverage_report_short_description(data)
         )
 
-        if data[:coverage_drop]
+        if data[:coverage_drop] && ENV['CI_PULL_REQUEST']
           github.add_comment(
             ENV['CIRCLE_PROJECT_REPONAME'],
             pull_request_number,
