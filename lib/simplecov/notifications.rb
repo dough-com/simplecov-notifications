@@ -49,25 +49,23 @@ module SimpleCov
         puts "Sending: #{data}"
         puts "ENV: #{ENV}"
 
-        puts ""
-
         unless ENV['CIRCLECI']
           puts "Data: #{data}"
           return
         end
 
-        github.create_status(
-          ENV['CIRCLE_PROJECT_REPONAME'],
-          ENV['CIRCLE_SHA1'],
-          coverage_check_status(data),
-          context: 'simplecov/drop-notification',
-          target_url: coverage_report_url,
-          description: coverage_report_short_description(data)
-        )
+        # github.create_status(
+        #   owner_repo_name,
+        #   ENV['CIRCLE_SHA1'],
+        #   coverage_check_status(data),
+        #   context: 'simplecov/notifications',
+        #   target_url: coverage_report_url,
+        #   description: coverage_report_short_description(data)
+        # )
 
         if data[:coverage_drop] && ENV['CI_PULL_REQUEST']
           github.add_comment(
-            ENV['CIRCLE_PROJECT_REPONAME'],
+            owner_repo_name,
             pull_request_number,
             coverage_report_description(data)
           )
@@ -96,6 +94,10 @@ module SimpleCov
         if data[:coverage_drop]
           "@#{ENV['CIRCLE_USERNAME']}: Your last push resulted in a *#{data[:coverage_drop]}%* code coverage drop from *#{data[:previous_coverage]}%* to *#{data[:current_coverage]}*."
         end
+      end
+
+      def owner_repo_name
+        "#{ENV['CIRCLE_PROJECT_USERNAME']}/#{ENV['CIRCLE_PROJECT_REPONAME']}"
       end
 
       def pull_request_number
